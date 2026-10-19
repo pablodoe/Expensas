@@ -1,20 +1,25 @@
-# Dashboard de expensas en Vercel
+# Dashboard de expensas: cochera y unidad
+
+La web utiliza `data/movimientos.csv` con estas columnas:
+
+```csv
+Periodo;Item;Proveedor;Concepto;Cochera;Unidad
+Oct-2026;1;FULL CONTROL SRL;Abono mensual;0;350000
+```
+
+No existe una columna OCR ni un importe general. Cochera y Unidad se mantienen separadas en los KPI, gráficos, rankings, tabla y conclusiones.
 
 ## Añadir un mes
 
-1. Abre `data/movimientos.csv`.
-2. Añade una fila por gasto, respetando el separador `;` y las columnas existentes.
-3. Ejecuta `python scripts/generar_conclusiones.py` para regenerar `data/conclusiones.csv`.
-4. Confirma ambos archivos en GitHub. Vercel publicará el cambio.
+1. Añade una fila por movimiento a `data/movimientos.csv`.
+2. Usa punto decimal y no uses separador de miles.
+3. Ejecuta:
 
-Ejemplo:
-
-```csv
-Periodo;Item;Proveedor;Concepto;Cochera;Unidad;EstadoOCR
-Oct-2026;1;FULL CONTROL SRL;Abono mensual;0;350000;OK
+```bash
+python scripts/generar_conclusiones.py
 ```
 
-Los importes usan punto decimal y no llevan separador de miles. Los ajustes negativos se conservan en el detalle, pero los gráficos de gasto utilizan importes positivos.
+4. Sube a Git los archivos `data/movimientos.csv` y `data/conclusiones.csv`.
 
 ## Desarrollo local
 
@@ -22,8 +27,6 @@ Los importes usan punto decimal y no llevan separador de miles. Los ajustes nega
 python -m http.server 8000
 ```
 
-Abre `http://localhost:8000`.
+## Vercel
 
-## Publicación
-
-Importa el repositorio en Vercel como sitio estático. No requiere comando de compilación ni variables de entorno.
+Importa el repositorio como proyecto estático. No requiere comando de build ni variables de entorno.
