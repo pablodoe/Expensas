@@ -1,24 +1,29 @@
-# Dashboard de expensas
+# Dashboard de expensas en Vercel
 
-Sitio estático y sin dependencias, listo para publicar en Vercel.
+## Añadir un mes
+
+1. Abre `data/movimientos.csv`.
+2. Añade una fila por gasto, respetando el separador `;` y las columnas existentes.
+3. Ejecuta `python scripts/generar_conclusiones.py` para regenerar `data/conclusiones.csv`.
+4. Confirma ambos archivos en GitHub. Vercel publicará el cambio.
+
+Ejemplo:
+
+```csv
+Periodo;Item;Proveedor;Concepto;Cochera;Unidad;EstadoOCR
+Oct-2026;1;FULL CONTROL SRL;Abono mensual;0;350000;OK
+```
+
+Los importes usan punto decimal y no llevan separador de miles. Los ajustes negativos se conservan en el detalle, pero los gráficos de gasto utilizan importes positivos.
+
+## Desarrollo local
+
+```bash
+python -m http.server 8000
+```
+
+Abre `http://localhost:8000`.
 
 ## Publicación
 
-1. Descomprime el ZIP.
-2. Sube la carpeta a un repositorio de GitHub.
-3. En Vercel, selecciona **Add New > Project**, importa el repositorio y pulsa **Deploy**.
-4. No requiere comando de build ni variables de entorno.
-
-También puede publicarse con Vercel CLI ejecutando `vercel` dentro de la carpeta.
-
-## Datos
-
-Los registros están en `data.js`, generados desde el OCR de las liquidaciones. Los movimientos marcados como `Revisar OCR` deben contrastarse con el PDF original.
-
-## Funciones
-
-- Filtro por mes, proveedor y texto.
-- KPI de gasto, proveedores, mayor proveedor y promedio mensual.
-- Evolución mensual, distribución y ranking de proveedores.
-- Tabla detallada y exportación CSV del filtro activo.
-- Tema claro/oscuro y diseño adaptable a móvil.
+Importa el repositorio en Vercel como sitio estático. No requiere comando de compilación ni variables de entorno.
