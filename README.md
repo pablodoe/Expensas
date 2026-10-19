@@ -1,27 +1,28 @@
-# Dashboard de expensas: cochera y unidad
+# Dashboard de expensas
 
-La web utiliza `data/movimientos.csv` con estas columnas:
+## Formato del CSV
+
+`data/movimientos.csv` debe tener exactamente estas columnas, separadas por punto y coma:
 
 ```csv
-Periodo;Item;Proveedor;Concepto;Cochera;Unidad
-Oct-2026;1;FULL CONTROL SRL;Abono mensual;0;350000
+Periodo;Proveedor;Concepto;Cochera;Unidad
+ene-26;FULL CONTROL SRL;Abono mensual;0;263473.70
 ```
 
-No existe una columna OCR ni un importe general. Cochera y Unidad se mantienen separadas en los KPI, gráficos, rankings, tabla y conclusiones.
+No incluye `Item`, `OCR` ni un importe general.
+
+## Períodos
+
+La web detecta automáticamente los períodos presentes en el CSV. Admite `ene-26`, `feb-26`, `mar-27`, etc., y los ordena cronológicamente sin una lista fija por año.
 
 ## Añadir un mes
 
-1. Añade una fila por movimiento a `data/movimientos.csv`.
+1. Añade las filas al final de `data/movimientos.csv`.
 2. Usa punto decimal y no uses separador de miles.
-3. Ejecuta:
+3. Ejecuta `python scripts/generar_conclusiones.py`.
+4. Sube `movimientos.csv` y `conclusiones.csv` al repositorio.
 
-```bash
-python scripts/generar_conclusiones.py
-```
-
-4. Sube a Git los archivos `data/movimientos.csv` y `data/conclusiones.csv`.
-
-## Desarrollo local
+## Vista local
 
 ```bash
 python -m http.server 8000
@@ -29,4 +30,4 @@ python -m http.server 8000
 
 ## Vercel
 
-Importa el repositorio como proyecto estático. No requiere comando de build ni variables de entorno.
+Proyecto estático: no requiere comando de build ni variables de entorno.
