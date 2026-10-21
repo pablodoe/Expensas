@@ -108,8 +108,10 @@ async function init(){
 
 $('#search').oninput=render;
 
-$('#showGarage').onchange=render;
-$('#showUnit').onchange=render;
+document
+  .querySelectorAll('input[name="chartView"]')
+  .forEach(x => x.onchange = render);
+    
     $('#conclusionPeriod').onchange=renderInsights;
 
     $('#theme').onclick=()=>
@@ -193,8 +195,16 @@ function render(){
  const gm=grouped(r,x=>x.Periodo,'Cochera'),
       um=grouped(r,x=>x.Periodo,'Unidad');
 
-const showGarage=$('#showGarage').checked;
-const showUnit=$('#showUnit').checked;
+const view =
+  document.querySelector(
+    'input[name="chartView"]:checked'
+  ).value;
+
+const showGarage =
+  view === 'garage' || view === 'both';
+
+const showUnit =
+  view === 'unit' || view === 'both';
 
 const values=[];
 
