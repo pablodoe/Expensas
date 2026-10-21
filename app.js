@@ -106,7 +106,10 @@ async function init(){
     $('#supplier').onchange=
       render;
 
-    $('#search').oninput=render;
+$('#search').oninput=render;
+
+$('#showGarage').onchange=render;
+$('#showUnit').onchange=render;
     $('#conclusionPeriod').onchange=renderInsights;
 
     $('#theme').onclick=()=>
@@ -187,21 +190,38 @@ function render(){
   rank('#garageRank',g,'var(--blue)');
   rank('#unitRank',u,'var(--mint)');
 
-  const gm=grouped(r,x=>x.Periodo,'Cochera'),
-        um=grouped(r,x=>x.Periodo,'Unidad'),
-        max=Math.max(1,...Object.values(gm),...Object.values(um));
+ const gm=grouped(r,x=>x.Periodo,'Cochera'),
+      um=grouped(r,x=>x.Periodo,'Unidad');
 
-  $('#monthly').innerHTML=
-    periods
-      .filter(p=>gm[p]||um[p])
-      .map(p=>
-        `<div class="month" title="${p} · Cochera ${money(gm[p]||0)} · Unidad ${money(um[p]||0)}">
-          <i class="bar blue" style="height:${(gm[p]||0)/max*100}%"></i>
-          <i class="bar mint" style="height:${(um[p]||0)/max*100}%"></i>
-          <span>${p}</span>
-        </div>`
-      )
-      .join('');
+const showGarage=$('#showGarage').checked;
+const showUnit=$('#showUnit').checked;
+
+const values=[];
+
+if(showGarage) values.push(...Object.values(gm));
+if(showUnit) values.push(...Object.values(um));
+
+const max=Math.max(1,...values);
+
+$('#monthly').innerHTML=
+  periods
+    .filter(p=>gm[p]||um[p])
+    .map(p=>`
+      <div class="month"
+           title="${p} · Cochera ${money(gm[p]||0)} · Unidad ${money(um[p]||0)}">
+
+        ${showGarage
+          ? `<i class="bar blue" style="height:${(gm[p]||0)/max*100}%"></i>`
+          : ''}
+
+        ${showUnit
+          ? `<i class="bar mint" style="height:${(um[p]||0)/max*100}%"></i>`
+          : ''}
+
+        <span>${p}</span>
+      </div>
+    `)
+    .join('');
 
   $('#rows').innerHTML=r.map(x=>{
 
