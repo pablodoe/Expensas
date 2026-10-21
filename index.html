@@ -1,1 +1,153 @@
-<!doctype html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Expensas | Cochera y Unidad</title><link rel="stylesheet" href="styles.css"></head><body><header><div><b>CONSORCIO 27 DE FEBRERO 1298</b><h1>Gastos por proveedor</h1><p>Análisis independiente de cochera y unidad</p></div><button id="theme" aria-label="Cambiar tema">◐</button></header><main><section class="filters"><label>Período<select id="period"><option value="">Todos</option></select></label><label>Proveedor<select id="supplier"><option value="">Todos</option></select></label><label>Buscar<input id="search" placeholder="Proveedor o concepto"></label><button id="export">Exportar CSV</button></section><p id="error" class="error" hidden></p><section class="kpis"><article><span>Cochera</span><strong id="garage">$ 0</strong></article><article><span>Unidad</span><strong id="unit">$ 0</strong></article><article><span>Proveedores cochera</span><strong id="garageProviders">0</strong></article><article><span>Proveedores unidad</span><strong id="unitProviders">0</strong></article></section><section class="grid"><article class="panel all"><h2>Evolución mensual</h2><p>Los períodos se leen directamente del CSV</p><div id="monthly" class="chart"></div><div class="legend"><i class="blue"></i>Cochera <i class="mint"></i>Unidad</div></article><article class="panel"><h2>Ranking cochera</h2><div id="garageRank"></div></article><article class="panel"><h2>Ranking unidad</h2><div id="unitRank"></div></article></section><section class="panel conclusions"><div class="head"><div><h2>Conclusión mensual</h2><p>Tendencias, ranking y aumentos por categoría</p></div><select id="conclusionPeriod"></select></div><div id="insights"></div></section><section class="panel details"><h2>Detalle</h2><div class="scroll"><table><thead><tr><th>Período</th><th>Proveedor</th><th>Concepto</th><th class="num">Cochera</th><th class="num">Unidad</th></tr></thead><tbody id="rows"></tbody></table></div></section><footer>Fuente: <code>data/movimientos.csv</code>. Formato de período admitido: <code>ene-26</code>, <code>feb-26</code> y equivalentes de cualquier año.</footer></main><script src="app.js"></script></body></html>
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Expensas | Cochera y Unidad</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<header>
+    <div>
+        <b>CONSORCIO 27 DE FEBRERO 1298</b>
+        <h1>Gastos por proveedor</h1>
+        <p>Análisis independiente de cochera y unidad</p>
+    </div>
+    <button id="theme" aria-label="Cambiar tema">◐</button>
+</header>
+
+<main>
+
+    <section class="filters">
+        <label>
+            Período
+            <select id="period">
+                <option value="">Todos</option>
+            </select>
+        </label>
+
+        <label>
+            Proveedor
+            <select id="supplier">
+                <option value="">Todos</option>
+            </select>
+        </label>
+
+        <label>
+            Buscar
+            <input id="search" placeholder="Proveedor o concepto">
+        </label>
+
+        <button id="export">Exportar CSV</button>
+    </section>
+
+    <p id="error" class="error" hidden></p>
+
+    <section class="kpis">
+        <article>
+            <span>Cochera</span>
+            <strong id="garage">$ 0</strong>
+        </article>
+
+        <article>
+            <span>Unidad</span>
+            <strong id="unit">$ 0</strong>
+        </article>
+
+        <article>
+            <span>Proveedores cochera</span>
+            <strong id="garageProviders">0</strong>
+        </article>
+
+        <article>
+            <span>Proveedores unidad</span>
+            <strong id="unitProviders">0</strong>
+        </article>
+    </section>
+
+    <section class="grid">
+
+        <article class="panel all">
+            <h2>Evolución mensual</h2>
+            <p>Los períodos se leen directamente del CSV</p>
+
+            <div id="monthly" class="chart"></div>
+
+            <div class="legend">
+                <i class="blue"></i>Cochera
+                <i class="mint"></i>Unidad
+            </div>
+        </article>
+
+        <article class="panel">
+            <h2>Ranking cochera</h2>
+            <div id="garageRank"></div>
+        </article>
+
+        <article class="panel">
+            <h2>Ranking unidad</h2>
+            <div id="unitRank"></div>
+        </article>
+
+    </section>
+
+    <section class="panel conclusions">
+
+        <div class="head">
+            <div>
+                <h2>Conclusión mensual</h2>
+                <p>Tendencias, ranking y aumentos por categoría</p>
+            </div>
+
+            <select id="conclusionPeriod"></select>
+        </div>
+
+        <div id="insights"></div>
+
+    </section>
+
+    <section class="panel details">
+
+        <h2>Detalle</h2>
+
+        <div class="scroll">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Período</th>
+                        <th>Proveedor</th>
+                        <th>Concepto</th>
+                        <th class="num">Cochera</th>
+                        <th class="num">Unidad</th>
+                        <th style="width:140px">Controlado</th>
+                    </tr>
+                </thead>
+
+                <tbody id="rows"></tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    <footer>
+        Fuente:
+        <code>data/movimientos.csv</code>.
+        Formato de período admitido:
+        <code>ene-26</code>,
+        <code>feb-26</code>
+        y equivalentes de cualquier año.
+    </footer>
+
+</main>
+
+<script src="app.js"></script>
+
+</body>
+</html>
