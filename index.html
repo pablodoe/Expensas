@@ -47,25 +47,42 @@
     <p id="error" class="error" hidden></p>
 
     <section class="kpis">
-        <article>
-            <span>Cochera</span>
-            <strong id="garage">$ 0</strong>
-        </article>
+<article>
+    <span>Promedio mensual</span>
 
-        <article>
-            <span>Unidad</span>
-            <strong id="unit">$ 0</strong>
-        </article>
+    <div class="chart-filters">
 
-        <article>
-            <span>Proveedores cochera</span>
-            <strong id="garageProviders">0</strong>
-        </article>
+        <label>
+            <input type="radio"
+                   name="averageView"
+                   value="unit"
+                   checked>
+            Unidad
+        </label>
 
-        <article>
-            <span>Proveedores unidad</span>
-            <strong id="unitProviders">0</strong>
-        </article>
+        <label>
+            <input type="radio"
+                   name="averageView"
+                   value="garage">
+            Cochera
+        </label>
+
+        <label>
+            <input type="radio"
+                   name="averageView"
+                   value="both">
+            Ambos
+        </label>
+
+    </div>
+
+    <strong id="monthlyAverage">$ 0</strong>
+</article>
+
+<article>
+    <span>Proveedores</span>
+    <strong id="providerCount">0</strong>
+</article>
     </section>
 
     <section class="grid">
