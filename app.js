@@ -2,7 +2,7 @@ const $=s=>document.querySelector(s),
 MONTH={ene:1,feb:2,mar:3,abr:4,may:5,jun:6,jul:7,ago:8,sep:9,oct:10,nov:11,dic:12},
 money=n=>new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0}).format(n);
 
-let data=[],notes=[],periods=[];
+let data=[],notes=[],inflation=[],periods=[];
 
 function split(line){
   let out=[],s='',q=false;
@@ -49,15 +49,22 @@ function comparePeriod(a,b){
 async function init(){
   try{
 
-    const [m,c]=await Promise.all([
-      fetch('data/movimientos.csv',{cache:'no-store'})
-        .then(r=>{
-          if(!r.ok)throw Error('No se encontró movimientos.csv');
-          return r.text()
-        }),
-      fetch('data/conclusiones.csv',{cache:'no-store'})
-        .then(r=>r.ok?r.text():'')
-    ]);
+const [m,c,i]=await Promise.all([
+  fetch('data/movimientos.csv',{cache:'no-store'})
+    .then(r=>{
+      if(!r.ok)throw Error('No se encontró movimientos.csv');
+      return r.text()
+    }),
+
+  fetch('data/conclusiones.csv',{cache:'no-store'})
+    .then(r=>r.ok?r.text():''),
+
+  fetch('data/inflacion.csv',{cache:'no-store'})
+    .then(r=>{
+      if(!r.ok)throw Error('No se encontró inflacion.csv');
+      return r.text()
+    })
+]);
 
     data=parse(m).map(x=>({
       ...x,
@@ -68,6 +75,15 @@ async function init(){
     }));
 
     notes=c?parse(c):[];
+
+    inflation=parse(i).map(x=>({
+  Periodo:(x.Periodo||'').trim().toLowerCase(),
+  Inflacion:Number(
+    String(x.Inflacion||0)
+      .replace('%','')
+      .replace(',','.')
+  )
+}));
 
     const required=[
       'Periodo',
@@ -287,7 +303,7 @@ rank(
   rankColor
 );
 
- const gm=grouped(r,x=>x.Periodo,'Cochera'),
+const gm=grouped(r,x=>x.Periodo,'Cochera'),
       um=grouped(r,x=>x.Periodo,'Unidad');
 
 const view =
@@ -301,32 +317,222 @@ const showGarage =
 const showUnit =
   view === 'unit' || view === 'both';
 
+/*
+ * Períodos que tienen al menos un movimiento
+ * con los filtros actualmente aplicados.
+ */
+const visiblePeriods = periods.filter(
+  p => (gm[p] || 0) > 0 || (um[p] || 0) > 0
+);
+
+/*
+ * Importe real utilizado como base de la línea.
+ *
+ * Unidad: importe mensual de unidad.
+ * Cochera: importe mensual de cochera.
+ * Ambos: suma de unidad y cochera.
+ */
+const actualValue = p => {
+  if(view === 'unit'){
+    return um[p] || 0;
+  }
+
+  if(view === 'garage'){
+    return gm[p] || 0;
+  }
+
+  return (gm[p] || 0) + (um[p] || 0);
+};
+
+/*
+ * Inflación correspondiente a cada período.
+ */
+const inflationByPeriod =
+  Object.fromEntries(
+    inflation.map(x=>[
+      x.Periodo,
+      Number.isFinite(x.Inflacion)
+        ? x.Inflacion
+        : 0
+    ])
+  );
+
+/*
+ * Construcción de la referencia acumulada.
+ *
+ * El primer mes toma el importe real.
+ * Cada mes siguiente aplica la inflación
+ * correspondiente al mes anterior.
+ */
+const inflationReference = [];
+
+visiblePeriods.forEach((period,index)=>{
+
+  if(index === 0){
+    inflationReference.push(
+      actualValue(period)
+    );
+
+    return;
+  }
+
+  const previousPeriod =
+    visiblePeriods[index - 1];
+
+  const previousReference =
+    inflationReference[index - 1];
+
+  const previousInflation =
+    inflationByPeriod[previousPeriod] || 0;
+
+  inflationReference.push(
+    previousReference *
+    (1 + previousInflation / 100)
+  );
+});
+
+/*
+ * La escala incluye las barras y la línea roja.
+ */
 const values=[];
 
-if(showGarage) values.push(...Object.values(gm));
-if(showUnit) values.push(...Object.values(um));
+if(showGarage){
+  values.push(
+    ...visiblePeriods.map(p=>gm[p]||0)
+  );
+}
+
+if(showUnit){
+  values.push(
+    ...visiblePeriods.map(p=>um[p]||0)
+  );
+}
+
+values.push(...inflationReference);
 
 const max=Math.max(1,...values);
 
-$('#monthly').innerHTML=
-  periods
-    .filter(p=>gm[p]||um[p])
-    .map(p=>`
-      <div class="month"
-           title="${p} · Cochera ${money(gm[p]||0)} · Unidad ${money(um[p]||0)}">
+/*
+ * Puntos SVG.
+ *
+ * Se utiliza una vista de 1000 × 300.
+ * La altura deja espacio inferior para
+ * los nombres de los períodos.
+ */
+const chartWidth=1000;
+const chartHeight=260;
+const topPadding=12;
+const bottomPadding=18;
+const usableHeight=
+  chartHeight-topPadding-bottomPadding;
 
-        ${showGarage
-          ? `<i class="bar blue" style="height:${(gm[p]||0)/max*100}%"></i>`
-          : ''}
+const pointCoordinates =
+  inflationReference.map((value,index)=>{
 
-        ${showUnit
-          ? `<i class="bar mint" style="height:${(um[p]||0)/max*100}%"></i>`
-          : ''}
+    const x =
+      visiblePeriods.length === 1
+        ? chartWidth / 2
+        : (
+            index /
+            (visiblePeriods.length - 1)
+          ) * chartWidth;
 
-        <span>${p}</span>
-      </div>
-    `)
-    .join('');
+    const y =
+      topPadding +
+      (
+        1 - value / max
+      ) * usableHeight;
+
+    return {
+      x,
+      y,
+      value,
+      period:visiblePeriods[index]
+    };
+  });
+
+const polylinePoints =
+  pointCoordinates
+    .map(point=>`${point.x},${point.y}`)
+    .join(' ');
+
+$('#monthly').innerHTML=`
+
+  <div class="monthly-bars">
+
+    ${visiblePeriods.map((p,index)=>{
+
+      const reference =
+        inflationReference[index] || 0;
+
+      const previousPeriod =
+        visiblePeriods[index - 1];
+
+      const appliedInflation =
+        index === 0
+          ? null
+          : inflationByPeriod[previousPeriod] || 0;
+
+      const title =
+        index === 0
+          ? `${p} · Referencia inicial ${money(reference)}`
+          : `${p} · Referencia inflacionaria ${money(reference)} · Inflación aplicada ${appliedInflation}%`;
+
+      return `
+        <div class="month"
+             title="${title}">
+
+          ${showGarage
+            ? `<i class="bar blue"
+                  style="height:${(gm[p]||0)/max*100}%">
+               </i>`
+            : ''
+          }
+
+          ${showUnit
+            ? `<i class="bar mint"
+                  style="height:${(um[p]||0)/max*100}%">
+               </i>`
+            : ''
+          }
+
+          <span>${p}</span>
+        </div>
+      `;
+
+    }).join('')}
+
+  </div>
+
+  ${visiblePeriods.length
+    ? `
+      <svg class="inflation-line"
+           viewBox="0 0 ${chartWidth} ${chartHeight}"
+           preserveAspectRatio="none"
+           aria-label="Evolución acumulada por inflación">
+
+        <polyline
+          points="${polylinePoints}">
+        </polyline>
+
+        ${pointCoordinates.map(point=>`
+          <circle
+            cx="${point.x}"
+            cy="${point.y}"
+            r="7">
+
+            <title>
+              ${point.period}: ${money(point.value)}
+            </title>
+
+          </circle>
+        `).join('')}
+
+      </svg>
+    `
+    : ''
+  }
+`;
 
   $('#rows').innerHTML=r.map(x=>{
 
