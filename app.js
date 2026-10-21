@@ -108,6 +108,10 @@ async function init(){
 
 $('#search').oninput=render;
 
+    document
+  .querySelectorAll('input[name="averageView"]')
+  .forEach(x => x.onchange = render);
+
 document
   .querySelectorAll('input[name="chartView"]')
   .forEach(x => x.onchange = render);
@@ -181,17 +185,79 @@ function render(){
         g=grouped(r,x=>x.Proveedor,'Cochera'),
         u=grouped(r,x=>x.Proveedor,'Unidad');
 
-  $('#garage').textContent=
-    money(Object.values(g).reduce((a,b)=>a+b,0));
+const meses = new Set(r.map(x => x.Periodo)).size || 1;
 
-  $('#unit').textContent=
-    money(Object.values(u).reduce((a,b)=>a+b,0));
+const promedioCochera =
+  Object.values(g).reduce((a,b)=>a+b,0) / meses;
 
-  $('#garageProviders').textContent=
-    Object.values(g).filter(v=>v>0).length;
+const promedioUnidad =
+  Object.values(u).reduce((a,b)=>a+b,0) / meses;
 
-  $('#unitProviders').textContent=
-    Object.values(u).filter(v=>v>0).length;
+const averageView =
+  document.querySelector(
+    'input[name="averageView"]:checked'
+  ).value;
+
+const meses =
+  new Set(r.map(x => x.Periodo)).size || 1;
+
+let promedio = 0;
+let proveedores = 0;
+
+if (averageView === 'unit') {
+
+  promedio =
+    Object.values(u)
+      .reduce((a,b)=>a+b,0) / meses;
+
+  proveedores =
+    Object.values(u)
+      .filter(v => v > 0)
+      .length;
+
+}
+else if (averageView === 'garage') {
+
+  promedio =
+    Object.values(g)
+      .reduce((a,b)=>a+b,0) / meses;
+
+  proveedores =
+    Object.values(g)
+      .filter(v => v > 0)
+      .length;
+
+}
+else {
+
+  const keys = new Set([
+    ...Object.keys(g),
+    ...Object.keys(u)
+  ]);
+
+  const ambos = {};
+
+  keys.forEach(k=>{
+    ambos[k] =
+      (g[k] || 0) +
+      (u[k] || 0);
+  });
+
+  promedio =
+    Object.values(ambos)
+      .reduce((a,b)=>a+b,0) / meses;
+
+  proveedores =
+    Object.values(ambos)
+      .filter(v => v > 0)
+      .length;
+}
+
+$('#monthlyAverage').textContent =
+  money(promedio);
+
+$('#providerCount').textContent =
+  proveedores;
 
 const rankView =
   document.querySelector(
