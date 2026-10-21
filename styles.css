@@ -186,6 +186,17 @@ main{
   vector-effect:non-scaling-stroke;
 }
 
+.legend .inflation-legend{
+  display:inline-block;
+  width:26px;
+  height:3px;
+  margin-left:14px;
+  margin-right:6px;
+  background:#ef4444;
+  border-radius:999px;
+  vertical-align:middle;
+}
+
 .inflation-line circle{
   fill:#ef4444;
   stroke:#fff;
