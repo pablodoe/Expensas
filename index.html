@@ -71,15 +71,27 @@
     <section class="grid">
 
         <article class="panel all">
-            <h2>Evolución mensual</h2>
-            <p>Los períodos se leen directamente del CSV</p>
+<h2>Evolución mensual</h2>
+<p>Los períodos se leen directamente del CSV</p>
 
-            <div id="monthly" class="chart"></div>
+<div class="chart-filters">
+    <label>
+        <input type="checkbox" id="showGarage" checked>
+        Cochera
+    </label>
 
-            <div class="legend">
-                <i class="blue"></i>Cochera
-                <i class="mint"></i>Unidad
-            </div>
+    <label>
+        <input type="checkbox" id="showUnit" checked>
+        Unidad
+    </label>
+</div>
+
+<div id="monthly" class="chart"></div>
+
+<div class="legend">
+    <i class="blue"></i>Cochera
+    <i class="mint"></i>Unidad
+</div>
         </article>
 
         <article class="panel">
