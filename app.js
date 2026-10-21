@@ -221,7 +221,7 @@ else{
       (u[k] || 0);
   });
 
-  rankColor = 'var(--accent)';
+  rankColor = '#7c3aed';
 }
 
 rank(
