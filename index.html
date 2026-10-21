@@ -108,15 +108,37 @@
 </div>
         </article>
 
-        <article class="panel">
-            <h2>Ranking cochera</h2>
-            <div id="garageRank"></div>
-        </article>
+<article class="panel">
+    <h2>Ranking por proveedor</h2>
 
-        <article class="panel">
-            <h2>Ranking unidad</h2>
-            <div id="unitRank"></div>
-        </article>
+    <div class="chart-filters">
+
+        <label>
+            <input type="radio"
+                   name="rankView"
+                   value="unit"
+                   checked>
+            Unidad
+        </label>
+
+        <label>
+            <input type="radio"
+                   name="rankView"
+                   value="garage">
+            Cochera
+        </label>
+
+        <label>
+            <input type="radio"
+                   name="rankView"
+                   value="both">
+            Ambos
+        </label>
+
+    </div>
+
+    <div id="providerRank"></div>
+</article>
 
     </section>
 
