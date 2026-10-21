@@ -75,15 +75,29 @@
 <p>Los períodos se leen directamente del CSV</p>
 
 <div class="chart-filters">
+
     <label>
-        <input type="checkbox" id="showGarage" checked>
+        <input type="radio"
+               name="chartView"
+               value="garage">
         Cochera
     </label>
 
     <label>
-        <input type="checkbox" id="showUnit" checked>
+        <input type="radio"
+               name="chartView"
+               value="unit"
+               checked>
         Unidad
     </label>
+
+    <label>
+        <input type="radio"
+               name="chartView"
+               value="both">
+        Ambos
+    </label>
+
 </div>
 
 <div id="monthly" class="chart"></div>
