@@ -111,6 +111,10 @@ $('#search').oninput=render;
 document
   .querySelectorAll('input[name="chartView"]')
   .forEach(x => x.onchange = render);
+
+document
+  .querySelectorAll('input[name="rankView"]')
+  .forEach(x => x.onchange = render);
     
     $('#conclusionPeriod').onchange=renderInsights;
 
@@ -189,8 +193,42 @@ function render(){
   $('#unitProviders').textContent=
     Object.values(u).filter(v=>v>0).length;
 
-  rank('#garageRank',g,'var(--blue)');
-  rank('#unitRank',u,'var(--mint)');
+const rankView =
+  document.querySelector(
+    'input[name="rankView"]:checked'
+  ).value;
+
+let rankData = {};
+let rankColor = 'var(--mint)';
+
+if(rankView === 'unit'){
+  rankData = u;
+  rankColor = 'var(--mint)';
+}
+else if(rankView === 'garage'){
+  rankData = g;
+  rankColor = 'var(--blue)';
+}
+else{
+  const keys = new Set([
+    ...Object.keys(g),
+    ...Object.keys(u)
+  ]);
+
+  keys.forEach(k=>{
+    rankData[k] =
+      (g[k] || 0) +
+      (u[k] || 0);
+  });
+
+  rankColor = 'var(--accent)';
+}
+
+rank(
+  '#providerRank',
+  rankData,
+  rankColor
+);
 
  const gm=grouped(r,x=>x.Periodo,'Cochera'),
       um=grouped(r,x=>x.Periodo,'Unidad');
