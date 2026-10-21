@@ -187,19 +187,10 @@ function render(){
 
 const meses = new Set(r.map(x => x.Periodo)).size || 1;
 
-const promedioCochera =
-  Object.values(g).reduce((a,b)=>a+b,0) / meses;
-
-const promedioUnidad =
-  Object.values(u).reduce((a,b)=>a+b,0) / meses;
-
 const averageView =
   document.querySelector(
     'input[name="averageView"]:checked'
   ).value;
-
-const meses =
-  new Set(r.map(x => x.Periodo)).size || 1;
 
 let promedio = 0;
 let proveedores = 0;
