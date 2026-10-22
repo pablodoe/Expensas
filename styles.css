@@ -130,6 +130,11 @@ main{
 .kpis article{
     width:100%;
     max-width:none;
+
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:15px;
+    padding:18px;
 }
 
 .panel{
