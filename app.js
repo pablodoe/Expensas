@@ -429,13 +429,9 @@ const usableHeight=
 const pointCoordinates =
   inflationReference.map((value,index)=>{
 
-    const x =
-      visiblePeriods.length === 1
-        ? chartWidth / 2
-        : (
-            index /
-            (visiblePeriods.length - 1)
-          ) * chartWidth;
+const x =
+  ((index + 0.5) / visiblePeriods.length) *
+  chartWidth;
 
     const y =
       topPadding +
@@ -473,10 +469,13 @@ $('#monthly').innerHTML=`
           ? null
           : inflationByPeriod[previousPeriod] || 0;
 
-      const title =
-        index === 0
-          ? `${p} · Referencia inicial ${money(reference)}`
-          : `${p} · Referencia inflacionaria ${money(reference)} · Inflación aplicada ${appliedInflation}%`;
+const gastoReal =
+  actualValue(p);
+
+const title =
+  `Gasto Real ${money(gastoReal)} - ` +
+  `Inflación ${Number(appliedInflation || 0).toFixed(1)}% - ` +
+  `Gasto estimado x Inf ${money(reference)}`;
 
       return `
         <div class="month"
@@ -515,18 +514,33 @@ $('#monthly').innerHTML=`
           points="${polylinePoints}">
         </polyline>
 
-        ${pointCoordinates.map(point=>`
-          <circle
-            cx="${point.x}"
-            cy="${point.y}"
-            r="7">
+${pointCoordinates.map((point,index)=>{
 
-            <title>
-              ${point.period}: ${money(point.value)}
-            </title>
+  const gastoReal =
+    actualValue(point.period);
 
-          </circle>
-        `).join('')}
+  const periodoInflacion =
+    index > 0
+      ? visiblePeriods[index - 1]
+      : null;
+
+  const inflacionAplicada =
+    periodoInflacion
+      ? inflationByPeriod[periodoInflacion] || 0
+      : 0;
+
+  return `
+    <circle
+      cx="${point.x}"
+      cy="${point.y}"
+      r="7">
+
+      <title>Gasto Real ${money(gastoReal)} - Inflación ${inflacionAplicada.toFixed(1)}% - Estimado x Inf ${money(point.value)}</title>
+
+    </circle>
+  `;
+
+}).join('')}
 
       </svg>
     `
