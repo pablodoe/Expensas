@@ -123,6 +123,10 @@ main{
     margin:14px 0
 }
 
+.kpi-main{
+    width:100%;
+}
+
 .kpis article,
 .panel{
     background:var(--card);
