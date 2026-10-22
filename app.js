@@ -169,7 +169,7 @@ function filtered(){
 function grouped(rows,key,field){
   return rows.reduce(
     (a,x)=>
-      (a[key(x)]=(a[key(x)]||0)+Math.max(0,x[field]),a),
+      (a[key(x)]=(a[key(x)]||0)+x[field],a),
     {}
   )
 }
