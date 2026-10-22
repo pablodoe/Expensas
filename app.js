@@ -272,8 +272,8 @@ else {
 $('#monthlyAverage').textContent =
   money(promedio);
 
-$('#providerCount').textContent =
-  proveedores;
+$('#providerCountText').textContent =
+  `Total proveedores: ${proveedores}`;
 
 const rankView =
   document.querySelector(
