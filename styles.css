@@ -127,7 +127,11 @@ main{
     width:100%;
 }
 
-.kpis article,
+.kpis article{
+    width:100%;
+    max-width:none;
+}
+
 .panel{
     background:var(--card);
     border:1px solid var(--line);
