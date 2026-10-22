@@ -160,10 +160,36 @@ main{
   align-items:stretch;
   width:100%;
   height:100%;
+    gap:12px;
 }
 
 .monthly-bars .month{
+    position:relative;
   flex:1;
+  min-width:0;
+
+  display:flex;
+  justify-content:center;
+  align-items:flex-end;
+
+  gap:4px;
+  padding:0 6px;
+  box-sizing:border-box;
+}
+
+.monthly-bars .month .bar{
+  flex:0 1 22px;
+  width:22px;
+  max-width:32%;
+  border-radius:6px 6px 0 0;
+}
+
+.monthly-bars .month span{
+  position:absolute;
+  bottom:-26px;
+  left:50%;
+  transform:translateX(-50%);
+  white-space:nowrap;
 }
 
 .inflation-line{
