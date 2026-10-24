@@ -268,9 +268,8 @@ main{
 }
 
 .chart{
-    padding:20px 5px 28px;
+    padding:0;
     border-bottom:1px solid var(--line);
-    height:auto;
 }
 
 .month{
