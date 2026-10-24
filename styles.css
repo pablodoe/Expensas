@@ -189,7 +189,7 @@ main{
 
 .monthly-content{
     position:relative;
-    min-width:1000px;
+    width:1000px;
     height:270px;
 }
 
