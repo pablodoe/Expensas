@@ -432,7 +432,7 @@ const max=Math.max(1,...values);
  * La altura deja espacio inferior para
  * los nombres de los períodos.
  */
-const chartWidth=1400;
+const chartWidth=1000;
 const chartHeight=260;
 const topPadding=12;
 const bottomPadding=18;
@@ -465,11 +465,10 @@ const polylinePoints =
     .map(point=>`${point.x},${point.y}`)
     .join(' ');
 
-$('#monthly').innerHTML=`
+$('#monthly').innerHTML = `
+  <div class="monthly-bars">
 
-    <div class="monthly-bars">
-
-    ${visiblePeriods.map((p,index)=>{
+    ${visiblePeriods.map((p,index) => {
 
       const reference =
         inflationReference[index] || 0;
@@ -479,32 +478,38 @@ $('#monthly').innerHTML=`
 
       const appliedInflation =
         index === 0
-          ? null
+          ? 0
           : inflationByPeriod[previousPeriod] || 0;
 
-const gastoReal =
-  actualValue(p);
+      const gastoReal =
+        actualValue(p);
 
-const title =
-  `Gasto Real ${money(gastoReal)} - ` +
-  `Inflación ${Number(appliedInflation || 0).toFixed(1)}% - ` +
-  `Gasto estimado x Inf ${money(reference)}`;
+      const title =
+        `Gasto real ${money(gastoReal)} - ` +
+        `Inflación ${Number(appliedInflation).toFixed(1)}% - ` +
+        `Gasto estimado por inflación ${money(reference)}`;
 
       return `
         <div class="month"
              title="${title}">
 
           ${showGarage
-            ? `<i class="bar blue"
-                  style="height:${(gm[p]||0)/max*100}%">
-               </i>`
+            ? `
+              <i
+                class="bar blue"
+                style="height:${(gm[p] || 0) / max * 100}%">
+              </i>
+            `
             : ''
           }
 
           ${showUnit
-            ? `<i class="bar mint"
-                  style="height:${(um[p]||0)/max*100}%">
-               </i>`
+            ? `
+              <i
+                class="bar mint"
+                style="height:${(um[p] || 0) / max * 100}%">
+              </i>
+            `
             : ''
           }
 
@@ -518,50 +523,54 @@ const title =
 
   ${visiblePeriods.length
     ? `
-      <svg class="inflation-line"
-           viewBox="0 0 ${chartWidth} ${chartHeight}"
-           preserveAspectRatio="none"
-           aria-label="Evolución acumulada por inflación">
+      <svg
+        class="inflation-line"
+        viewBox="0 0 ${chartWidth} ${chartHeight}"
+        preserveAspectRatio="none"
+        aria-label="Evolución acumulada por inflación">
 
         <polyline
           points="${polylinePoints}">
         </polyline>
 
-${pointCoordinates.map((point,index)=>{
+        ${pointCoordinates.map((point,index) => {
 
-  const gastoReal =
-    actualValue(point.period);
+          const gastoReal =
+            actualValue(point.period);
 
-  const periodoInflacion =
-    index > 0
-      ? visiblePeriods[index - 1]
-      : null;
+          const periodoInflacion =
+            index > 0
+              ? visiblePeriods[index - 1]
+              : null;
 
-  const inflacionAplicada =
-    periodoInflacion
-      ? inflationByPeriod[periodoInflacion] || 0
-      : 0;
+          const inflacionAplicada =
+            periodoInflacion
+              ? inflationByPeriod[periodoInflacion] || 0
+              : 0;
 
-  return `
-    <circle
-      cx="${point.x}"
-      cy="${point.y}"
-      r="7">
+          return `
+            <circle
+              cx="${point.x}"
+              cy="${point.y}"
+              r="7">
 
-      <title>Gasto Real ${money(gastoReal)} - Inflación ${inflacionAplicada.toFixed(1)}% - Estimado x Inf ${money(point.value)}</title>
+              <title>
+                Gasto real ${money(gastoReal)} -
+                Inflación ${inflacionAplicada.toFixed(1)}% -
+                Estimado por inflación ${money(point.value)}
+              </title>
 
-    </circle>
-  `;
+            </circle>
+          `;
 
-}).join('')}
+        }).join('')}
 
       </svg>
     `
     : ''
   }
-
 `;
-
+  
   $('#rows').innerHTML=r.map(x=>{
 
     const controlado=(x.Controlado||'').trim();
