@@ -432,7 +432,7 @@ const max=Math.max(1,...values);
  * La altura deja espacio inferior para
  * los nombres de los períodos.
  */
-const chartWidth=1000;
+const chartWidth=1400;
 const chartHeight=260;
 const topPadding=12;
 const bottomPadding=18;
@@ -469,7 +469,7 @@ $('#monthly').innerHTML=`
 
   <div class="monthly-scroll">
 
-  <div class="monthly-content">
+    <div class="monthly-content">
 
     <div class="monthly-bars">
 
