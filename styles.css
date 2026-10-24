@@ -181,14 +181,15 @@ main{
 }
 
 .monthly-scroll{
-    overflow:auto;
+    overflow-x:auto;
+    overflow-y:hidden;
     width:100%;
 }
 
 .monthly-content{
     position:relative;
     width:1000px;
-    height:270px;
+    height:300px;
 }
 
 .monthly-bars{
@@ -504,6 +505,10 @@ footer{
         display:block;
         padding:18px 14px;
     }
+
+    #monthly{
+    width:100%;
+}
 
     header button{
         margin-top:12px;
