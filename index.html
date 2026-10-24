@@ -1,229 +1,99 @@
 <!doctype html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Expensas | Cochera y Unidad</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Expensas | Cochera y Unidad</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-
 <header>
-    <div>
-        <b>CONSORCIO 27 DE FEBRERO 1298</b>
-        <h1>Gastos por proveedor</h1>
-        <p>Análisis independiente de cochera y unidad</p>
-    </div>
-    <button id="theme" aria-label="Cambiar tema">◐</button>
+  <div>
+    <b>CONSORCIO 27 DE FEBRERO 1298</b>
+    <h1>Gastos por proveedor</h1>
+    <p>Análisis independiente de cochera y unidad</p>
+  </div>
+  <button id="theme" aria-label="Cambiar tema">◐</button>
 </header>
-
 <main>
+  <section class="filters">
+    <label>Período<select id="period"><option value="">Todos</option></select></label>
+    <label>Proveedor<select id="supplier"><option value="">Todos</option></select></label>
+    <label>Buscar<input id="search" placeholder="Proveedor o concepto"></label>
+    <button id="export">Exportar CSV</button>
+  </section>
+  <p id="error" class="error" hidden></p>
 
-    <section class="filters">
-        <label>
-            Período
-            <select id="period">
-                <option value="">Todos</option>
-            </select>
-        </label>
+  <section class="kpis">
+    <article class="kpi-main">
+      <span>Promedio mensual</span>
+      <div class="chart-filters">
+        <label><input type="radio" name="averageView" value="unit" checked>Unidad</label>
+        <label><input type="radio" name="averageView" value="garage">Cochera</label>
+        <label><input type="radio" name="averageView" value="both">Ambos</label>
+      </div>
+      <strong id="monthlyAverage">$ 0</strong>
+      <small id="providerCountText">Total proveedores: 0</small>
+    </article>
+  </section>
 
-        <label>
-            Proveedor
-            <select id="supplier">
-                <option value="">Todos</option>
-            </select>
-        </label>
+  <section class="grid">
+    <article class="panel all">
+      <h2>Evolución mensual</h2>
+      <p>El primer mes se toma de referencia para calcular el estimado según la inflación</p>
+      <div class="chart-filters">
+        <label><input type="radio" name="chartView" value="garage">Cochera</label>
+        <label><input type="radio" name="chartView" value="unit" checked>Unidad</label>
+        <label><input type="radio" name="chartView" value="both">Ambos</label>
+      </div>
+      <div id="monthly" class="chart"></div>
+      <div class="legend">
+        <i class="blue"></i>Cochera
+        <i class="mint"></i>Unidad
+        <i class="inflation-legend"></i>Inflación acumulada
+      </div>
+    </article>
+  </section>
 
-        <label>
-            Buscar
-            <input id="search" placeholder="Proveedor o concepto">
-        </label>
+  <section class="kpis">
+    <article class="panel">
+      <h2>Ranking por proveedor</h2>
+      <div class="chart-filters">
+        <label><input type="radio" name="rankView" value="unit" checked>Unidad</label>
+        <label><input type="radio" name="rankView" value="garage">Cochera</label>
+        <label><input type="radio" name="rankView" value="both">Ambos</label>
+      </div>
+      <div id="providerRank"></div>
+    </article>
+  </section>
 
-        <button id="export">Exportar CSV</button>
-    </section>
-
-    <p id="error" class="error" hidden></p>
-
-    <section class="kpis">
-<article class="kpi-main">
-    <span>Promedio mensual</span>
-
-    <div class="chart-filters">
-
-        <label>
-            <input type="radio"
-                   name="averageView"
-                   value="unit"
-                   checked>
-            Unidad
-        </label>
-
-        <label>
-            <input type="radio"
-                   name="averageView"
-                   value="garage">
-            Cochera
-        </label>
-
-        <label>
-            <input type="radio"
-                   name="averageView"
-                   value="both">
-            Ambos
-        </label>
-
+  <section class="panel conclusions">
+    <h2>Conclusión mensual</h2>
+    <div class="head">
+      <div class="chart-filters">
+        <label><input type="radio" name="conclusionView" value="unit" checked>Unidad</label>
+        <label><input type="radio" name="conclusionView" value="garage">Cochera</label>
+      </div>
+      <select id="conclusionPeriod"></select>
     </div>
+    <div id="insights"></div>
+  </section>
 
-    <strong id="monthlyAverage">$ 0</strong>
-    
-    <small id="providerCountText">
-    Total proveedores: 0
-    </small>
-</article>
-    </section>
-
-    <section class="grid">
-
-        <article class="panel all">
-<h2>Evolución mensual</h2>
-<p>El primer mes se toma de referencia para calcular el estimado según la inflación</p>
-
-<div class="chart-filters">
-
-    <label>
-        <input type="radio"
-               name="chartView"
-               value="garage">
-        Cochera
-    </label>
-
-    <label>
-        <input type="radio"
-               name="chartView"
-               value="unit"
-               checked>
-        Unidad
-    </label>
-
-    <label>
-        <input type="radio"
-               name="chartView"
-               value="both">
-        Ambos
-    </label>
-
-</div>
-
-<div id="monthly" class="chart"></div>
-
-<div class="legend">
-    <i class="blue"></i>Cochera
-    <i class="mint"></i>Unidad
-    <i class="inflation-legend"></i>Inflación acumulada
-</div>
-        </article>
-</section>
-    <section class="kpis">
-<article class="panel">
-    <h2>Ranking por proveedor</h2>
-
-    <div class="chart-filters">
-
-        <label>
-            <input type="radio"
-                   name="rankView"
-                   value="unit"
-                   checked>
-            Unidad
-        </label>
-
-        <label>
-            <input type="radio"
-                   name="rankView"
-                   value="garage">
-            Cochera
-        </label>
-
-        <label>
-            <input type="radio"
-                   name="rankView"
-                   value="both">
-            Ambos
-        </label>
-
+  <section class="panel details">
+    <h2>Detalle</h2>
+    <div class="scroll">
+      <table>
+        <thead><tr>
+          <th>Período</th><th>Proveedor</th><th>Concepto</th>
+          <th class="num">Cochera</th><th class="num">Unidad</th>
+          <th style="width:140px">Controlado</th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
     </div>
-
-    <div id="providerRank"></div>
-</article>
-
-    </section>
-
-    <section class="panel conclusions">
-                <h2>Conclusión mensual</h2>
-        <div class="head">
-            <div class="chart-filters">
-
-    <label>
-        <input
-            type="radio"
-            name="conclusionView"
-            value="unit"
-            checked>
-        Unidad
-    </label>
-
-    <label>
-        <input
-            type="radio"
-            name="conclusionView"
-            value="garage">
-        Cochera
-    </label>
-
-</div>
-            <select id="conclusionPeriod"></select>
-        </div>
-
-        <div id="insights"></div>
-
-    </section>
-
-    <section class="panel details">
-
-        <h2>Detalle</h2>
-
-        <div class="scroll">
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>Período</th>
-                        <th>Proveedor</th>
-                        <th>Concepto</th>
-                        <th class="num">Cochera</th>
-                        <th class="num">Unidad</th>
-                        <th style="width:140px">Controlado</th>
-                    </tr>
-                </thead>
-
-                <tbody id="rows"></tbody>
-
-            </table>
-
-        </div>
-
-    </section>
-
-    <footer>
-Sitio en desarrollo. Puede contener errores involuntarios.
-    </footer>
-
+  </section>
+  <footer>Sitio en desarrollo. Puede contener errores involuntarios.</footer>
 </main>
-
 <script src="app.js"></script>
-
 </body>
 </html>
