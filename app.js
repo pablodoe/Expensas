@@ -595,16 +595,6 @@ function renderInsights(){
           ${n.TendenciaUnidad}
         </article>
 
-        <article>
-          <b>Ranking anual cochera</b>
-          ${n.RankingAnualCochera}
-        </article>
-
-        <article>
-          <b>Ranking anual unidad</b>
-          ${n.RankingAnualUnidad}
-        </article>
-
         <article class="full">
           <b>Detección de aumentos</b>
           ${n.DeteccionAumentos}
