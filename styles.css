@@ -33,6 +33,16 @@ body.dark{
     min-width: 0;
 }
 
+.chart-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+.chart-scroll canvas {
+    min-width: 900px;
+}
+
 .dashboard-grid {
     display: grid;
     grid-template-columns: 1fr;
