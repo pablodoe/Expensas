@@ -579,33 +579,60 @@ ${pointCoordinates.map((point,index)=>{
 
 function renderInsights(){
 
-  const n=notes.find(
-    x=>x.Periodo.toLowerCase()===$('#conclusionPeriod').value
+  const selectedPeriod =
+    ($('#conclusionPeriod').value || '').toLowerCase();
+
+  const n = notes.find(
+    x => (x.Periodo || '').toLowerCase() === selectedPeriod
   );
 
-  $('#insights').innerHTML=n
-    ? `<div class="insight-grid">
-        <article>
-          <b>Tendencia cochera</b>
-          ${n.TendenciaCochera}
-        </article>
+  if(!n){
+    $('#insights').innerHTML =
+      '<p>No hay conclusión generada para este período.</p>';
 
-        <article>
-          <b>Tendencia unidad</b>
-          ${n.TendenciaUnidad}
-        </article>
+    return;
+  }
 
-        <article class="full">
-          <b>Detección de aumentos</b>
-          ${n.DeteccionAumentos}
-        </article>
+  const valueOrFallback = value =>
+    value && value.trim()
+      ? value
+      : '<span class="empty-insight">Sin información disponible.</span>';
 
-        <article class="full">
-          <b>Conclusión</b>
-          ${n.Conclusion}
-        </article>
-      </div>`
-    : '<p>No hay conclusión generada para este período.</p>'
+  $('#insights').innerHTML = `
+    <div class="insight-grid">
+
+      <article>
+        <b>Tendencia cochera</b>
+        ${valueOrFallback(n.TendenciaCochera)}
+      </article>
+
+      <article>
+        <b>Tendencia unidad</b>
+        ${valueOrFallback(n.TendenciaUnidad)}
+      </article>
+
+      <article>
+        <b>Aumentos cochera</b>
+        ${valueOrFallback(n.AumentosCochera)}
+      </article>
+
+      <article>
+        <b>Aumentos unidad</b>
+        ${valueOrFallback(n.AumentosUnidad)}
+      </article>
+
+      <article>
+        <b>Conclusión cochera</b>
+        ${valueOrFallback(n.ConclusionCochera)}
+      </article>
+
+      <article>
+        <b>Conclusión unidad</b>
+        ${valueOrFallback(n.ConclusionUnidad)}
+      </article>
+
+    </div>
+  `;
 }
 
 function exportCsv(){
