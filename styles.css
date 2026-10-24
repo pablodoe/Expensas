@@ -178,12 +178,10 @@ main{
 
 #monthly{
   width:100%;
-  overflow:hidden;
 }
 
 .monthly-scroll{
-    overflow-x:auto;
-    overflow-y:hidden;
+    overflow:auto;
     width:100%;
 }
 
@@ -561,14 +559,6 @@ footer{
     .chart-filters{
         flex-wrap:wrap;
         gap:10px;
-    }
-
-    /* evolucion mensual */
-
-    #monthly{
-        overflow-x:auto;
-        overflow-y:hidden;
-        padding-bottom:35px;
     }
 
     /* ranking */
