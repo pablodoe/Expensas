@@ -144,6 +144,10 @@ document
 document
   .querySelectorAll('input[name="rankView"]')
   .forEach(x => x.onchange = render);
+
+    document
+  .querySelectorAll('input[name="conclusionView"]')
+  .forEach(x => x.onchange = renderInsights);
     
     $('#conclusionPeriod').onchange=renderInsights;
 
@@ -589,50 +593,60 @@ function renderInsights(){
   if(!n){
     $('#insights').innerHTML =
       '<p>No hay conclusión generada para este período.</p>';
-
     return;
   }
 
-  const valueOrFallback = value =>
-    value && value.trim()
-      ? value
-      : '<span class="empty-insight">Sin información disponible.</span>';
+  const view =
+    document.querySelector(
+      'input[name="conclusionView"]:checked'
+    )?.value || 'unit';
 
-  $('#insights').innerHTML = `
-    <div class="insight-grid">
+  if(view === 'garage'){
 
-      <article>
-        <b>Tendencia cochera</b>
-        ${valueOrFallback(n.TendenciaCochera)}
-      </article>
+    $('#insights').innerHTML = `
+      <div class="insight-grid">
 
-      <article>
-        <b>Tendencia unidad</b>
-        ${valueOrFallback(n.TendenciaUnidad)}
-      </article>
+        <article>
+          <b>Tendencia cochera</b>
+          ${n.TendenciaCochera || 'Sin información'}
+        </article>
 
-      <article>
-        <b>Aumentos cochera</b>
-        ${valueOrFallback(n.AumentosCochera)}
-      </article>
+        <article class="full">
+          <b>Aumentos cochera</b>
+          ${n.AumentosCochera || 'Sin información'}
+        </article>
 
-      <article>
-        <b>Aumentos unidad</b>
-        ${valueOrFallback(n.AumentosUnidad)}
-      </article>
+        <article class="full">
+          <b>Conclusión cochera</b>
+          ${n.ConclusionCochera || 'Sin información'}
+        </article>
 
-      <article>
-        <b>Conclusión cochera</b>
-        ${valueOrFallback(n.ConclusionCochera)}
-      </article>
+      </div>
+    `;
 
-      <article>
-        <b>Conclusión unidad</b>
-        ${valueOrFallback(n.ConclusionUnidad)}
-      </article>
+  } else {
 
-    </div>
-  `;
+    $('#insights').innerHTML = `
+      <div class="insight-grid">
+
+        <article>
+          <b>Tendencia unidad</b>
+          ${n.TendenciaUnidad || 'Sin información'}
+        </article>
+
+        <article class="full">
+          <b>Aumentos unidad</b>
+          ${n.AumentosUnidad || 'Sin información'}
+        </article>
+
+        <article class="full">
+          <b>Conclusión unidad</b>
+          ${n.ConclusionUnidad || 'Sin información'}
+        </article>
+
+      </div>
+    `;
+  }
 }
 
 function exportCsv(){
