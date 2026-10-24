@@ -37,8 +37,9 @@ header button{height:42px;width:42px} main{padding:0 24px 45px}
 
 .chart-filters{display:flex;gap:18px;margin:12px 0;align-items:center}
 .chart-filters label{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;font-weight:600}.chart-filters input{margin:0}
-.rank{display:grid;grid-template-columns:140px minmax(0,1fr) 110px;gap:8px;margin:12px 0;align-items:center;font-size:11px}
-.rank label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.track{height:8px;background:var(--bg);border-radius:8px;overflow:hidden}.track i{display:block;height:100%;border-radius:8px}.num{text-align:right;font-variant-numeric:tabular-nums}
+.rank{display:grid;grid-template-columns:minmax(160px,240px) minmax(120px,1fr) minmax(135px,max-content);gap:12px;width:100%;min-width:0;margin:12px 0;align-items:center;font-size:11px}
+#providerRank{width:100%;min-width:0}
+.rank label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.track{height:8px;background:var(--bg);border-radius:8px;overflow:hidden}.track i{display:block;height:100%;border-radius:8px}.num{min-width:0;text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
 .conclusions,.details{margin-top:12px}.head{display:flex;justify-content:space-between;align-items:center;gap:16px}
 .insight-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:18px}.insight-grid article{background:var(--bg);padding:14px;border-radius:11px}.insight-grid b{display:block;margin-bottom:5px}.full{grid-column:1/-1}
 .details{padding:0}.details h2{padding:18px}.scroll{overflow:auto;max-height:460px}
