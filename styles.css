@@ -180,18 +180,6 @@ main{
   width:100%;
 }
 
-.monthly-scroll{
-    overflow-x:auto;
-    overflow-y:hidden;
-    width:100%;
-}
-
-.monthly-content{
-    position:relative;
-    min-width:1400px;
-    height:270px;
-}
-
 .monthly-bars{
   display:flex;
   align-items:stretch;
