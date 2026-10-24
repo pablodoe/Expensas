@@ -467,7 +467,11 @@ const polylinePoints =
 
 $('#monthly').innerHTML=`
 
-  <div class="monthly-bars">
+  <div class="monthly-scroll">
+
+  <div class="monthly-content">
+
+    <div class="monthly-bars">
 
     ${visiblePeriods.map((p,index)=>{
 
@@ -559,6 +563,10 @@ ${pointCoordinates.map((point,index)=>{
     `
     : ''
   }
+
+    </div>
+
+</div>
 `;
 
   $('#rows').innerHTML=r.map(x=>{
