@@ -33,22 +33,6 @@ body.dark{
     min-width: 0;
 }
 
-.chart-scroll {
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-}
-
-.chart-scroll canvas {
-    min-width: 900px;
-}
-
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-}
-
 header,main{
     max-width:1240px;
     margin:auto
@@ -470,35 +454,175 @@ footer{
     border-radius:6px;
 }
 
-@media(max-width:800px){
+/* =================================
+   TABLET
+================================= */
+
+@media (max-width: 900px){
+
+    header{
+        padding:24px 16px;
+    }
+
+    main{
+        padding:0 16px 30px;
+    }
+
     .filters{
-        grid-template-columns:1fr 1fr
+        grid-template-columns:1fr 1fr;
     }
 
     .kpis{
-        grid-template-columns:1fr 1fr
+        grid-template-columns:1fr;
     }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
 }
 
-@media(max-width:540px){
+/* =================================
+   MOBILE
+================================= */
 
-    .filters,
-    .grid,
-    .insight-grid{
-        grid-template-columns:1fr
+@media (max-width: 768px){
+
+    body{
+        overflow-x:hidden;
     }
 
-    .all,
+    header{
+        display:block;
+        padding:18px 14px;
+    }
+
+    header button{
+        margin-top:12px;
+    }
+
+    h1{
+        font-size:24px;
+        line-height:1.2;
+    }
+
+    main{
+        padding:0 14px 25px;
+    }
+
+    /* filtros */
+
+    .filters{
+        grid-template-columns:1fr;
+    }
+
+    .filters button{
+        width:100%;
+    }
+
+    /* KPI */
+
+    .kpi-main{
+        text-align:center;
+    }
+
+    #monthlyAverage{
+        display:block;
+        font-size:30px;
+        line-height:1.1;
+        margin-top:10px;
+    }
+
+    #providerCountText{
+        display:block;
+        margin-top:10px;
+        font-size:13px;
+    }
+
+    /* cards */
+
+    .panel,
+    .kpis article{
+        padding:14px;
+    }
+
+    /* radios */
+
+    .chart-filters{
+        flex-wrap:wrap;
+        gap:10px;
+    }
+
+    /* evolucion mensual */
+
+    #monthly{
+        overflow-x:auto;
+        overflow-y:hidden;
+        padding-bottom:35px;
+    }
+
+    .monthly-bars{
+        min-width:900px;
+    }
+
+    .inflation-line{
+        width:900px;
+    }
+
+    /* ranking */
+
+    .rank{
+        grid-template-columns:140px 1fr;
+        gap:8px;
+    }
+
+    .track{
+        display:none;
+    }
+
+    .rank label{
+        font-size:12px;
+    }
+
+    .rank .num{
+        text-align:left;
+        font-size:12px;
+        font-weight:700;
+    }
+
+    /* conclusiones */
+
+    .insight-grid{
+        grid-template-columns:1fr;
+    }
+
     .full{
-        grid-column:auto
+        grid-column:auto;
     }
 
     .head{
-        display:block
+        display:block;
     }
 
     .head select{
         width:100%;
-        margin-top:10px
+        margin-top:10px;
     }
+
+    /* detalle */
+
+    .scroll{
+        overflow-x:auto;
+    }
+
+    table{
+        min-width:750px;
+    }
+
+    /* etiquetas de meses */
+
+    .monthly-bars .month span{
+        font-size:11px;
+    }
+
 }
