@@ -188,8 +188,8 @@ main{
 
 .monthly-content{
     position:relative;
-    width:1000px;
-    height:300px;
+    min-width:1400px;
+    height:270px;
 }
 
 .monthly-bars{
