@@ -509,6 +509,10 @@ footer{
     width:100%;
 }
 
+    .monthly-content{
+    min-width:1400px;
+}
+
     header button{
         margin-top:12px;
     }
