@@ -1,6 +1,28 @@
 const $=s=>document.querySelector(s);let headers=[],rows=[],version='',dirty=false;
 function message(text,type=''){const el=$('#state');el.textContent=text;el.className=type}
-async function api(url,options={}){const r=await fetch(url,{...options,headers:{'Content-Type':'application/json',...(options.headers||{})}});const body=await r.json().catch(()=>({}));if(r.status===401){showLogin();throw new Error('La sesión venció')}if(!r.ok)throw new Error(body.error||'Error del servidor');return body}
+async function api(url, options = {}) {
+    const r = await fetch(url, {
+        ...options,
+        headers: {
+            'Content-Type': 'application/json',
+            ...(options.headers || {})
+        }
+    });
+
+    const body = await r.json().catch(() => ({}));
+
+    if (!r.ok) {
+        // Solo interpretar 401 como sesión vencida
+        // cuando NO estamos intentando iniciar sesión.
+        if (r.status === 401 && url !== '/api/auth/login') {
+            showLogin();
+        }
+
+        throw new Error(body.error || `Error HTTP ${r.status}`);
+    }
+
+    return body;
+}
 function parseCsv(text){const out=[];let row=[],field='',quoted=false;for(let i=0;i<text.length;i++){const c=text[i],n=text[i+1];if(c==='"'&&quoted&&n==='"'){field+='"';i++}else if(c==='"')quoted=!quoted;else if(c===';'&&!quoted){row.push(field);field=''}else if((c==='\n'||c==='\r')&&!quoted){if(c==='\r'&&n==='\n')i++;row.push(field);field='';if(row.some(v=>v!==''))out.push(row);row=[]}else field+=c}if(field||row.length){row.push(field);out.push(row)}return out}
 function quote(v){v=String(v??'');return /[;"\r\n]/.test(v)?`"${v.replaceAll('"','""')}"`:v}
 function csv(){return [headers,...rows].map(r=>r.map(quote).join(';')).join('\n')+'\n'}
