@@ -1,0 +1,9 @@
+<!doctype html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Expensas · Administración</title><link rel="stylesheet" href="admin.css"></head><body>
+<header><div><b>CONSORCIO 27 DE FEBRERO 1298</b><h1>Administración de datos</h1><p>Edición segura de archivos CSV almacenados en Vercel Blob</p></div><button id="logout" class="secondary hidden">Cerrar sesión</button></header>
+<main>
+<section id="loginCard" class="card login"><h2>Ingresar</h2><form id="login"><label>Contraseña<input id="password" type="password" autocomplete="current-password" required></label><button>Ingresar</button></form><p id="loginError" class="error"></p></section>
+<section id="app" class="hidden">
+<div class="toolbar card"><label>Archivo<select id="file"><option value="movimientos">movimientos.csv</option><option value="inflacion">inflacion.csv</option><option value="conclusiones">conclusiones.csv</option></select></label><button id="reload" class="secondary">Recargar</button><button id="bootstrap" class="secondary">Migrar CSV iniciales</button><span id="state"></span></div>
+<div class="card"><div class="actions"><button id="add">+ Agregar fila</button><button id="save">Guardar cambios</button></div><div class="table-wrap"><table id="table"></table></div></div>
+<div class="card"><h2>Historial</h2><div id="history"></div></div>
+</section></main><script type="module" src="admin.js"></script></body></html>
