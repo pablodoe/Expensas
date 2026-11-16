@@ -1,1 +1,38 @@
-:root{font-family:Inter,system-ui,sans-serif;color:#172033;background:#f4f6fa;--primary:#2354d8;--border:#dbe1ea}*{box-sizing:border-box}body{margin:0}header{background:#172033;color:white;padding:24px max(20px,calc((100% - 1200px)/2));display:flex;align-items:center;justify-content:space-between}h1{margin:5px 0;font-size:1.7rem}header p{margin:0;color:#cbd4e7}main{max-width:1200px;margin:24px auto;padding:0 20px}.card{background:white;border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:18px;box-shadow:0 3px 12px #12213a0c}.login{max-width:420px;margin:60px auto}.hidden{display:none!important}form,label{display:grid;gap:8px}input,select,button{font:inherit;border-radius:8px;border:1px solid var(--border);padding:10px 12px}button{border-color:var(--primary);background:var(--primary);color:white;font-weight:700;cursor:pointer}.secondary{background:white;color:#172033;border-color:var(--border)}.toolbar,.actions{display:flex;align-items:end;gap:10px;flex-wrap:wrap}.toolbar label{min-width:220px}.toolbar #state{margin-left:auto;color:#526079}.actions{margin-bottom:14px}.table-wrap{overflow:auto;max-height:60vh;border:1px solid var(--border);border-radius:8px}table{border-collapse:collapse;width:max-content;min-width:100%}th,td{border-bottom:1px solid var(--border);border-right:1px solid var(--border);padding:8px;vertical-align:top}th{position:sticky;top:0;background:#eef2f8;text-align:left;z-index:1}td input{border:0;border-radius:0;padding:7px;min-width:150px;width:100%;background:transparent}td input:focus{outline:2px solid #86a6ff;background:#fff}.row-delete{background:#fff;color:#b42318;border-color:#f0b4ae;padding:6px 9px}.error{color:#b42318}.success{color:#18723c}.history-row{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}.history-row span{flex:1}@media(max-width:600px){header{align-items:flex-start;gap:12px}h1{font-size:1.35rem}.toolbar #state{width:100%;margin:0}}
+:root{font-family:Inter,system-ui,sans-serif;color:#172033;background:#f4f6fa;--primary:#2354d8;--border:#dbe1ea}*{box-sizing:border-box}body{margin:0}header{background:#172033;color:white;padding:24px max(20px,calc((100% - 1200px)/2));display:flex;align-items:center;justify-content:space-between}h1{margin:5px 0;font-size:1.7rem}header p{margin:0;color:#cbd4e7}main{max-width:1200px;margin:24px auto;padding:0 20px}.card{background:white;border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:18px;box-shadow:0 3px 12px #12213a0c}.login{max-width:420px;margin:60px auto}.hidden{display:none!important}form,label{display:grid;gap:8px}input,select,button{font:inherit;border-radius:8px;border:1px solid var(--border);padding:10px 12px}button{border-color:var(--primary);background:var(--primary);color:white;font-weight:700;cursor:pointer}.secondary{background:white;color:#172033;border-color:var(--border)}.toolbar,.actions{display:flex;align-items:end;gap:10px;flex-wrap:wrap}.toolbar label{min-width:220px}.toolbar #state{margin-left:auto;color:#526079}.actions{margin-bottom:14px}.table-wrap{overflow:auto;max-height:60vh;border:1px solid var(--border);border-radius:8px}table{border-collapse:collapse;width:max-content;min-width:100%}th,td{border-bottom:1px solid var(--border);border-right:1px solid var(--border);padding:8px;vertical-align:top}th{position:sticky;top:0;background:#eef2f8;text-align:left;z-index:1}td input{border:0;border-radius:0;padding:7px;min-width:150px;width:100%;background:transparent}td input:focus{outline:2px solid #86a6ff;background:#fff}.row-delete{background:#fff;color:#b42318;border-color:#f0b4ae;padding:6px 9px}.error{color:#b42318}.success{color:#18723c}.history-row{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}.history-row span{flex:1}@media(max-width:600px){header{align-items:flex-start;gap:12px}h1{font-size:1.35rem}.toolbar #state{width:100%;margin:0}
+#importDialog {
+    width: min(900px, 90vw);
+    border: 0;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+#importDialog::backdrop {
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.import-format {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 16px 0;
+}
+
+.import-format code {
+    display: block;
+    padding: 10px 12px;
+    background: #eef2f8;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+#importText {
+    display: block;
+    width: 100%;
+    min-height: 280px;
+    resize: vertical;
+    font-family: Consolas, "Courier New", monospace;
+    line-height: 1.4;
+}
+}
