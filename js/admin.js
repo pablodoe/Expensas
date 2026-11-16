@@ -1,4 +1,7 @@
 const $=s=>document.querySelector(s);let headers=[],rows=[],version='',dirty=false;
+const importDialog = $('#importDialog');
+const importText = $('#importText');
+const importInfo = $('#importInfo');
 function message(text,type=''){const el=$('#state');el.textContent=text;el.className=type}
 async function api(url, options = {}) {
     const r = await fetch(url, {
@@ -23,7 +26,75 @@ async function api(url, options = {}) {
 
     return body;
 }
-function parseCsv(text){const out=[];let row=[],field='',quoted=false;for(let i=0;i<text.length;i++){const c=text[i],n=text[i+1];if(c==='"'&&quoted&&n==='"'){field+='"';i++}else if(c==='"')quoted=!quoted;else if(c===';'&&!quoted){row.push(field);field=''}else if((c==='\n'||c==='\r')&&!quoted){if(c==='\r'&&n==='\n')i++;row.push(field);field='';if(row.some(v=>v!==''))out.push(row);row=[]}else field+=c}if(field||row.length){row.push(field);out.push(row)}return out}
+function parseCsv(text) {
+    const result = [];
+    let row = [];
+    let field = '';
+    let quoted = false;
+
+    // Elimina BOM UTF-8 si estuviera presente
+    text = text.replace(/^\uFEFF/, '');
+
+    for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        const next = text[i + 1];
+
+        // Comillas
+        if (char === '"') {
+
+            // "" dentro de un campo entre comillas representa una comilla literal
+            if (quoted && next === '"') {
+                field += '"';
+                i++;
+            } else {
+                quoted = !quoted;
+            }
+
+            continue;
+        }
+
+        // Separador ;
+        if (char === ';' && !quoted) {
+            row.push(field);
+            field = '';
+            continue;
+        }
+
+        // Fin de línea
+        if ((char === '\n' || char === '\r') && !quoted) {
+
+            // En Windows el salto es \r\n
+            if (char === '\r' && next === '\n') {
+                i++;
+            }
+
+            row.push(field);
+            field = '';
+
+            // Ignorar líneas totalmente vacías
+            if (row.some(value => value !== '')) {
+                result.push(row);
+            }
+
+            row = [];
+            continue;
+        }
+
+        // Cualquier otro carácter
+        field += char;
+    }
+
+    // Última fila si el texto no termina con salto de línea
+    if (field !== '' || row.length > 0) {
+        row.push(field);
+
+        if (row.some(value => value !== '')) {
+            result.push(row);
+        }
+    }
+
+    return result;
+}
 function quote(v){v=String(v??'');return /[;"\r\n]/.test(v)?`"${v.replaceAll('"','""')}"`:v}
 function csv(){return [headers,...rows].map(r=>r.map(quote).join(';')).join('\n')+'\n'}
 function render(){const t=$('#table');t.innerHTML='';const head=document.createElement('thead'),tr=document.createElement('tr');headers.forEach(h=>{const th=document.createElement('th');th.textContent=h;tr.append(th)});tr.append(document.createElement('th'));head.append(tr);t.append(head);const body=document.createElement('tbody');rows.forEach((row,ri)=>{const tr=document.createElement('tr');headers.forEach((_,ci)=>{const td=document.createElement('td'),input=document.createElement('input');input.value=row[ci]??'';input.addEventListener('input',()=>{rows[ri][ci]=input.value;dirty=true;message('Cambios sin guardar')});td.append(input);tr.append(td)});const td=document.createElement('td'),b=document.createElement('button');b.className='row-delete';b.textContent='Eliminar';b.onclick=()=>{rows.splice(ri,1);dirty=true;render();message('Cambios sin guardar')};td.append(b);tr.append(td);body.append(tr)});t.append(body)}
@@ -36,4 +107,85 @@ $('#login').onsubmit=async e=>{e.preventDefault();$('#loginError').textContent='
 $('#logout').onclick=async()=>{await api('/api/auth/logout',{method:'POST'});showLogin()};$('#file').onchange=()=>{if(!dirty||confirm('Hay cambios sin guardar. ¿Descartarlos?'))load();else $('#file').value=$('#file').dataset.previous||'movimientos';$('#file').dataset.previous=$('#file').value};$('#reload').onclick=load;
 $('#add').onclick=()=>{rows.push(headers.map(()=>''));dirty=true;render();message('Cambios sin guardar')};
 $('#save').onclick=async()=>{if(!headers.length)return message('No hay archivo cargado','error');message('Guardando…');try{const data=await api(`/api/admin/data?file=${$('#file').value}`,{method:'PUT',body:JSON.stringify({content:csv(),expectedVersion:version})});version=data.version;dirty=false;message('Guardado correctamente','success');await loadHistory()}catch(e){message(e.message,'error')}};
+$('#import').onclick = () => {
+    importText.value = '';
+    importInfo.textContent = '';
+    importDialog.showModal();
+};
+$('#cancelImport').onclick = () => {
+    importDialog.close();
+};
+$('#confirmImport').onclick = () => {
+    const text = importText.value.trim();
+
+    if (!text) {
+        importInfo.textContent = 'No hay registros para importar.';
+        return;
+    }
+
+    const parsed = parseCsv(text);
+
+    if (!parsed.length) {
+        importInfo.textContent = 'No se encontraron registros.';
+        return;
+    }
+
+    const expectedHeaders = [
+        'Periodo',
+        'Proveedor',
+        'Concepto',
+        'Cochera',
+        'Unidad',
+        'Controlado'
+    ];
+
+    // Si el texto pegado contiene encabezado, lo eliminamos.
+    const firstRow = parsed[0].map(value => value.trim());
+
+    const hasHeader =
+        firstRow.length === expectedHeaders.length &&
+        firstRow.every(
+            (value, index) =>
+                value.toLowerCase() ===
+                expectedHeaders[index].toLowerCase()
+        );
+
+    if (hasHeader) {
+        parsed.shift();
+    }
+
+    if (!parsed.length) {
+        importInfo.textContent =
+            'No hay movimientos para agregar.';
+        return;
+    }
+
+    // Verificamos solamente la estructura.
+    // NO buscamos duplicados.
+    const invalidIndex =
+        parsed.findIndex(row => row.length !== expectedHeaders.length);
+
+    if (invalidIndex !== -1) {
+        importInfo.textContent =
+            `La fila ${invalidIndex + 1} no contiene las 6 columnas esperadas.`;
+        return;
+    }
+
+    // Agregar todos los movimientos a la tabla en memoria.
+    // Todavía NO se guarda nada en Blob.
+    parsed.forEach(row => {
+        rows.push(row);
+    });
+
+    dirty = true;
+
+    render();
+
+    message(
+        `${parsed.length} registros agregados. Revisalos antes de guardar.`,
+        'success'
+    );
+
+    importDialog.close();
+};
 window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue=''}});api('/api/auth/status').then(x=>x.authenticated?showApp():showLogin()).catch(showLogin);
