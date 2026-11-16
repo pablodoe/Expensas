@@ -4,6 +4,36 @@
 <section id="loginCard" class="card login"><h2>Ingresar</h2><form id="login"><label>Contraseña<input id="password" type="password" autocomplete="current-password" required></label><button>Ingresar</button></form><p id="loginError" class="error"></p></section>
 <section id="app" class="hidden">
 <div class="toolbar card"><label>Archivo<select id="file"><option value="movimientos">movimientos.csv</option><option value="inflacion">inflacion.csv</option><option value="conclusiones">conclusiones.csv</option></select></label><button id="reload" class="secondary">Recargar</button><span id="state"></span></div>
-<div class="card"><div class="actions"><button id="add">+ Agregar fila</button><button id="save">Guardar cambios</button></div><div class="table-wrap"><table id="table"></table></div></div>
+<div class="card"><div class="actions"><button id="add">+ Agregar fila</button><button id="import" class="secondary">Importar registros</button><button id="save">Guardar cambios</button></div><div class="table-wrap"><table id="table"></table></div></div>
 <div class="card"><h2>Historial</h2><div id="history"></div></div>
-</section></main><script type="module" src="js/admin.js"></script></body></html>
+</section>
+<dialog id="importDialog">
+    <h2>Importar registros</h2>
+
+    <p>
+        Pegá los movimientos en formato:
+    </p>
+
+    <code>
+        Periodo;Proveedor;Concepto;Cochera;Unidad;Controlado
+    </code>
+
+    <textarea
+        id="importText"
+        rows="14"
+        placeholder="nov-26;PROVEEDOR;Concepto;0;150000;"
+    ></textarea>
+
+    <p id="importInfo"></p>
+
+    <div class="actions">
+        <button id="cancelImport" class="secondary">
+            Cancelar
+        </button>
+
+        <button id="confirmImport">
+            Agregar a la tabla
+        </button>
+    </div>
+</dialog>
+</main><script type="module" src="js/admin.js"></script></body></html>
