@@ -10,19 +10,17 @@
 <dialog id="importDialog">
     <h2>Importar registros</h2>
 
-    <p>
-        Pegá los movimientos en formato:
-    </p>
+    <p>Pegá los movimientos en formato:</p>
 
-    <code>
-        Periodo;Proveedor;Concepto;Cochera;Unidad;Controlado
-    </code>
+    <div class="import-format">
+        <code>Periodo;Proveedor;Concepto;Cochera;Unidad;Controlado</code>
 
-    <textarea
-        id="importText"
-        rows="14"
-        placeholder="nov-26;PROVEEDOR;Concepto;0;150000;"
-    ></textarea>
+        <textarea
+            id="importText"
+            rows="14"
+            placeholder="nov-26;PROVEEDOR;Concepto;0;150000;"
+        ></textarea>
+    </div>
 
     <p id="importInfo"></p>
 
